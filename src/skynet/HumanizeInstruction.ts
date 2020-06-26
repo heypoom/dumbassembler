@@ -13,6 +13,7 @@ export const instructionsForHuman: OpMap = {
   pop: '',
   mov: '',
   int: '',
+  jmp: '',
   xor: '', // TODO: Make humans do bit level op.
   add: 'what is $a + $b?',
   sub: 'what is $a - $b?',
@@ -28,13 +29,21 @@ export const instructionsForHuman: OpMap = {
   jae: 'is $a more than or equal to $b?',
   jl: 'is $a less than $b?',
   jz: 'is $a zero?',
-  jmp: 'please type in $a in the input box',
 }
 
-const ignoreOps: Op[] = ['int', 'cmp', 'push', 'pop']
+const ignoreOps: Op[] = ['int', 'cmp', 'push', 'pop', 'jmp', 'xor']
 
 const defaultConfig: SimplifyConfig = {
   ops: instructionsForHuman,
+}
+
+export type QuestionType = 'NUMBER' | 'YES_NO' | 'NONE'
+
+export function getQuestionType(question: string): QuestionType {
+  if (question.startsWith('what is')) return 'NUMBER'
+  if (question.startsWith('is')) return 'YES_NO'
+
+  return 'NONE'
 }
 
 export function toHuman(code: string, ms = m()) {

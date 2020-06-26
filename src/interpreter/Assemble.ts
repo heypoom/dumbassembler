@@ -1,8 +1,12 @@
 import escapeRegex from 'lodash.escaperegexp'
 
-import {simpleOpMap, compareJumpOps, simpleRegMap} from './Simplify'
+import {compareJumpOps} from './Simplify'
 import {Op, Register} from './Machine'
 import {toLines} from './Utils'
+
+import {JSIL} from './JSIL.Simplify'
+
+const {ops: simpleOpMap, regs: simpleRegMap} = JSIL
 
 type OpRegexMap = Partial<Record<Op, RegExp>>
 
