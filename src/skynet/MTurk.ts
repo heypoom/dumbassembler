@@ -27,7 +27,7 @@ export async function createTask(question: string, maxTime: number = 120) {
     LifetimeInSeconds: 60 * 60,
     Question: question,
     AssignmentDurationInSeconds: maxTime,
-    Reward: '0.1$',
+    Reward: '0.3',
     MaxAssignments: 1,
   }
 
