@@ -1,5 +1,5 @@
-import {cmp} from '../src/modules/Instructions'
-import {m} from '../src/modules/Machine'
+import {cmp} from '../../src/interpreter/Instructions'
+import {m} from '../../src/interpreter/Machine'
 
 describe('comparison instruction', () => {
   it('should be able to compare 2 < 5', () => {

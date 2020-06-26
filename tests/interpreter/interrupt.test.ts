@@ -1,8 +1,8 @@
-import {runLines} from '../src/modules/Interpret'
-import {Machine} from '../src/modules/Machine'
-import {mov, setData} from '../src/modules/Instructions'
-import {int} from '../src/modules/Interrupt'
-import {Effect} from '../src/modules/Effect'
+import {runLines} from '../../src/interpreter/Interpret'
+import {Machine} from '../../src/interpreter/Machine'
+import {mov, setData} from '../../src/interpreter/Instructions'
+import {int} from '../../src/interpreter/Interrupt'
+import {Effect} from '../../src/interpreter/Effect'
 
 describe('interrupt routines', () => {
   it('should print hello world', () => {

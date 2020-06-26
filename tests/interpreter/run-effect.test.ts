@@ -1,5 +1,5 @@
-import {add, Program, stepOver} from '../src/modules/Program'
-import {setData} from '../src/modules/Instructions'
+import {add, Program, stepOver} from '../../src/interpreter/Program'
+import {setData} from '../../src/interpreter/Instructions'
 
 describe('effect runner', () => {
   it('should be able to react to effects', () => {

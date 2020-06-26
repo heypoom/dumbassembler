@@ -1,5 +1,5 @@
-import {runLines} from '../src/modules/Interpret'
-import {Program, add, step} from '../src/modules/Program'
+import {runLines} from '../../src/interpreter/Interpret'
+import {Program, add, step} from '../../src/interpreter/Program'
 
 describe('comparison program', () => {
   it('should be able to run comparison program in pure mode', () => {

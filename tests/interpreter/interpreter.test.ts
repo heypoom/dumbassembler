@@ -1,5 +1,5 @@
-import {Machine} from '../src/modules/Machine'
-import {interpret, runLines} from '../src/modules/Interpret'
+import {Machine} from '../../src/interpreter/Machine'
+import {interpret, runLines} from '../../src/interpreter/Interpret'
 
 const m = () => Machine()
 

@@ -1,7 +1,7 @@
 import React, {useReducer, useState} from 'react'
 import styled from '@emotion/styled'
 
-import {programReducer, Program, evaluate, RUN, RESET} from '../modules/Program'
+import {programReducer, Program, evaluate, RUN, RESET} from '../interpreter/Program'
 
 const Container = styled.div`
   display: flex;

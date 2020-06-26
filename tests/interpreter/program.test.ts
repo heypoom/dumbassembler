@@ -1,4 +1,4 @@
-import {Program, step, add} from '../src/modules/Program'
+import {Program, step, add} from '../../src/interpreter/Program'
 
 describe('program', () => {
   it('should be able to run added lines', () => {

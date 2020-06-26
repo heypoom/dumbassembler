@@ -1,8 +1,8 @@
-import {assemble} from '../src/modules/Assemble'
-import {setData} from '../src/modules/Instructions'
-import {m} from '../src/modules/Machine'
-import {runLines} from '../src/modules/Interpret'
-import {PrintEffect} from '../src/modules/Effect'
+import {assemble} from '../../src/interpreter/Assemble'
+import {setData} from '../../src/interpreter/Instructions'
+import {m} from '../../src/interpreter/Machine'
+import {runLines} from '../../src/interpreter/Interpret'
+import {PrintEffect} from '../../src/interpreter/Effect'
 
 describe('run program assembled from simplified code', () => {
   it('should be able to run hello world from simplified code', () => {

@@ -1,4 +1,4 @@
-import {m} from '../src/modules/Machine'
+import {m} from '../../src/interpreter/Machine'
 
 import {
   mov,
@@ -11,7 +11,7 @@ import {
   sub,
   inc,
   dec,
-} from '../src/modules/Instructions'
+} from '../../src/interpreter/Instructions'
 
 describe('instructions', () => {
   it('should be able to move value into a register', () => {

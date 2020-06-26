@@ -1,5 +1,5 @@
-import {trim} from '../src/modules/Utils'
-import {assemble} from '../src/modules/Assemble'
+import {trim} from '../../src/interpreter/Utils'
+import {assemble} from '../../src/interpreter/Assemble'
 
 describe('assemble simplified code', () => {
   it('should be able to assemble simplified code', () => {
@@ -26,7 +26,6 @@ describe('assemble simplified code', () => {
       push 50
       pop ebx
     `
-
     expect(assemble(input)).toBe(trim(output))
   })
 })

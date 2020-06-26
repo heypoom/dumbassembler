@@ -1,5 +1,5 @@
-import {trim} from '../src/modules/Utils'
-import {simplify} from '../src/modules/Simplify'
+import {trim} from '../../src/interpreter/Utils'
+import {simplify} from '../../src/interpreter/Simplify'
 
 describe('simplify module', () => {
   it('should simplify mov instructions', () => {

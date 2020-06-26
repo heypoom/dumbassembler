@@ -1,5 +1,5 @@
-import {m} from '../src/modules/Machine'
-import {push, pop} from '../src/modules/Instructions'
+import {m} from '../../src/interpreter/Machine'
+import {push, pop} from '../../src/interpreter/Instructions'
 
 describe('stack operations', () => {
   it('should increment stack pointer when pushing to the stack', () => {

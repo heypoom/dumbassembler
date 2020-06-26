@@ -1,6 +1,6 @@
-import {Machine} from '../src/modules/Machine'
-import {cmp} from '../src/modules/Instructions'
-import {jl, je, ja, jae} from '../src/modules/Comparison'
+import {Machine} from '../../src/interpreter/Machine'
+import {cmp} from '../../src/interpreter/Instructions'
+import {jl, je, ja, jae} from '../../src/interpreter/Comparison'
 
 const m = () => Machine()
 
