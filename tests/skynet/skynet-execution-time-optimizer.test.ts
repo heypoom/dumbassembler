@@ -1,4 +1,7 @@
-import {getExecutionTimeForOp} from '../../src/skynet/SkynetCostOptimizer'
+import {
+  getExecutionTimeForOp,
+  getTotalExecutionTime,
+} from '../../src/skynet/SkynetCostOptimizer'
 
 describe('skynet human execution time optimizer', () => {
   it('should allocate execution times efficiently', () => {
@@ -8,5 +11,16 @@ describe('skynet human execution time optimizer', () => {
     expect(getExecutionTimeForOp('sub', 10000000, 1)).toBe(120)
     expect(getExecutionTimeForOp('mul', 1234, 567)).toBe(180)
     expect(getExecutionTimeForOp('mul', 1234, 567)).toBe(180)
+  })
+
+  it('should compute total human execution time', () => {
+    let input = `
+      mov eax, 2000
+      add eax, 10
+      sub eax, 8
+      inc eax
+    `
+
+    expect(getTotalExecutionTime(input)).toBe(112)
   })
 })

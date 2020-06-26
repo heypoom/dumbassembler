@@ -1,4 +1,6 @@
-import {Op} from '../interpreter/Machine'
+import {Op, m, toVal} from '../interpreter/Machine'
+import {parseLine, toLines} from '../interpreter/Utils'
+import {interpret} from '../interpreter/Interpret'
 
 type Cost = number
 type CostFn = (a: number, b: number) => Cost
@@ -41,4 +43,19 @@ export function getExecutionTimeForOp(op: Op, a = 0, b = 0): Cost {
   if (typeof execTime === 'number') return execTime
 
   return 0
+}
+
+export function getTotalExecutionTime(code: string): Cost {
+  let ms = m()
+
+  function computeCost(line: string): Cost {
+    const [op, a, b] = parseLine(line)
+    ms = interpret(ms, line)
+
+    return getExecutionTimeForOp(op, toVal(ms, a), toVal(ms, b))
+  }
+
+  return toLines(code)
+    .map(computeCost)
+    .reduce((a, b) => a + b)
 }
