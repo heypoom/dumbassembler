@@ -71,7 +71,7 @@ export function createCrowdFields(code: string, ms = m()) {
   return trim(result)
 }
 
-export function createMTurkXML(code: string) {
+export function generateQuestionXMLFromCode(code: string) {
   const form = createCrowdFields(code)
 
   return MTurkXML(form)

@@ -1,6 +1,6 @@
 import {
   getExecutionTimeForOp,
-  getTotalExecutionTime,
+  getHumanTimeLimit,
 } from '../../src/skynet/SkynetCostOptimizer'
 
 describe('skynet human execution time optimizer', () => {
@@ -21,6 +21,6 @@ describe('skynet human execution time optimizer', () => {
       inc eax
     `
 
-    expect(getTotalExecutionTime(input)).toBe(112)
+    expect(getHumanTimeLimit(input)).toBe(112)
   })
 })

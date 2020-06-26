@@ -1,5 +1,5 @@
 import {trim} from '../../src/interpreter/Utils'
-import {createCrowdFields} from '../../src/skynet/MTurkRequester'
+import {createCrowdFields} from '../../src/skynet/MTurkPayload'
 
 describe('generate MTurk XML form', () => {
   it('should create input form for add eax, 10', () => {

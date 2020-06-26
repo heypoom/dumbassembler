@@ -45,7 +45,7 @@ export function getExecutionTimeForOp(op: Op, a = 0, b = 0): Cost {
   return 0
 }
 
-export function getTotalExecutionTime(code: string): Cost {
+export function getHumanTimeLimit(code: string): Cost {
   let ms = m()
 
   function computeCost(line: string): Cost {
