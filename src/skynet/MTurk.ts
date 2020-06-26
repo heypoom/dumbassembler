@@ -35,3 +35,46 @@ export async function createTask(question: string, maxTime: number = 120) {
 
   return data.HIT
 }
+
+interface Answer {
+  instruction: string
+  result: string
+}
+
+export function parseAnswer(answer: string = ''): Answer[] {
+  const parser = new DOMParser()
+  const xml = parser.parseFromString(answer, 'text/xml')
+
+  const fields = Array.from(xml.querySelectorAll('Answer'))
+
+  return fields.map(x => ({
+    instruction: x.querySelector('QuestionIdentifier')?.textContent || '',
+    result: x.querySelector('FreeText')?.textContent || '',
+  }))
+}
+
+export async function getTaskAnswer(taskId: string) {
+  const tasks = await mTurk.listAssignmentsForHIT({HITId: taskId}).promise()
+
+  return tasks.Assignments?.filter(a => a.Answer).map(a => ({
+    id: a.AssignmentId,
+    answer: parseAnswer(a.Answer),
+    status: a.AssignmentStatus,
+  }))
+}
+
+export async function listTaskResults() {
+  const tasks = await mTurk.listHITs().promise()
+  if (!tasks.HITs) return
+
+  const results = []
+
+  for (let hit of tasks.HITs) {
+    if (!hit.HITId) continue
+    const answers = await getTaskAnswer(hit.HITId)
+
+    results.push({id: hit.HITId, answers})
+  }
+
+  return results
+}
