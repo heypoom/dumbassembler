@@ -36,7 +36,8 @@ export const crowdElementMap: ElementMap = {
   `,
 }
 
-const toFormId = (code: string) => code.replace(',', '').replace(/ /g, '_')
+const toFormId = (code: string, lineNo: number) =>
+  lineNo + '_' + code.replace(',', '').replace(/ /g, '_')
 
 function toCrowdField(question: string, id: string) {
   let type = getQuestionType(question)
@@ -45,19 +46,16 @@ function toCrowdField(question: string, id: string) {
   return trim(handler(question, id))
 }
 
-const assistOps: Op[] = ['mov']
-const getOp = (code: string) => code.split(' ')[0] as Op
-
-export function codeToCrowdField(line: string, ms = m()) {
-  let id = toFormId(line)
+export function codeToCrowdField(line: string, no: number, ms = m()) {
+  let id = toFormId(line, no)
   let question = toHuman(line, ms)
 
   return toCrowdField(question, id)
 }
 
 export function createCrowdFields(code: string, ms = m()) {
-  function parseLine(line: string) {
-    let result = codeToCrowdField(line, ms)
+  function parseLine(line: string, no: number) {
+    let result = codeToCrowdField(line, no, ms)
     ms = interpret(ms, line)
 
     return result
