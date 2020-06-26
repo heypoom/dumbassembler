@@ -1,24 +1,53 @@
-import {Op} from '../interpreter/Machine'
+import {get} from '../interpreter/Instructions'
+import {Op, MachineState, Register, toVal, m} from '../interpreter/Machine'
+import {
+  SimplifyConfig,
+  OpMap,
+  RegMap,
+  simplify,
+  replaceArg,
+} from '../interpreter/Simplify'
 
-export const instructionsForHuman: Record<Op, string> = {
-  push: 'stack.push($a)',
-  pop: '$a = stack.pop()',
-  mov: '$a = $b',
+export const instructionsForHuman: OpMap = {
+  push: '',
+  pop: '',
+  mov: '',
+  int: '',
+  xor: '', // TODO: Make humans do bit level op.
   add: 'what is $a + $b?',
   sub: 'what is $a - $b?',
   mul: 'what is $a * $b?',
   div: 'what is $a / $b?',
-  xor: 'what is $a ^ $b?',
-  int: 'write $a in the box.',
-  inc: 'what is a + 1?',
-  dec: 'what is a - 1?',
+  inc: 'what is $a + 1?',
+  dec: 'what is $a - 1?',
   cmp: 'compare $a with $b',
-  je: 'if $a is less than $b, type in $c. Otherwise, leave it blank.',
-  jle: 'if $a is less than or equal $b, type in $c. Otherwise, leave it blank.',
-  jne: 'if $a is not equal to $b, type in $c. Otherwise, leave it blank.',
-  ja: 'if ($a > $b), write $c in the input. Otherwise, leave it blank.',
-  jae: 'if ($a >= $b), write $c in the input. Otherwise, leave it blank.',
-  jl: 'if ($a < $b), write $c in the input. Otherwise, leave it blank.',
-  jz: 'if (isZero($a)), write $c in the input. Otherwise, leave it blank.',
-  jmp: 'type in $a',
+  je: 'is $a less than $b?',
+  jle: 'is $a less than or equal $b?',
+  jne: 'is $a not equal to $b?',
+  ja: 'is $a more than $b?',
+  jae: 'is $a more than or equal to $b?',
+  jl: 'is $a less than $b?',
+  jz: 'is $a zero?',
+  jmp: 'please type in $a in the input box',
+}
+
+const ignoreOps: Op[] = ['int', 'cmp', 'push', 'pop']
+
+const defaultConfig: SimplifyConfig = {
+  ops: instructionsForHuman,
+}
+
+export function toHuman(code: string, ms = m()) {
+  const config: SimplifyConfig = {
+    ...defaultConfig,
+    transform: (op, $a, $b, code, ss) => {
+      const a = toVal(ms, $a).toString()
+      const b = toVal(ms, $b).toString()
+      const evaluated = replaceArg(code, a, b, '')
+
+      return [evaluated, ss]
+    },
+  }
+
+  return simplify(code, config)
 }
