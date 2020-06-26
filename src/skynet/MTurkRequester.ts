@@ -57,15 +57,10 @@ export function codeToCrowdField(line: string, ms = m()) {
 
 export function createCrowdFields(code: string, ms = m()) {
   function parseLine(line: string) {
-    let op = getOp(line)
+    let result = codeToCrowdField(line, ms)
+    ms = interpret(ms, line)
 
-    // If hoomans are too dumb to do some task, we use machines.
-    if (assistOps.includes(op)) {
-      ms = interpret(ms, line)
-      return ''
-    }
-
-    return codeToCrowdField(line, ms)
+    return result
   }
 
   const result = toLines(code)
