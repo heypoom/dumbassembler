@@ -61,26 +61,28 @@ export const replaceArg = (
 export const createSimplifyState = (): SimplifyState => ({cmpA: '', cmpB: ''})
 
 export function simplifyLine(
-  ins: string,
+  line: string,
   ss = createSimplifyState(),
   config = JSIL,
 ): SimplifyResult {
-  if (!ins) return ['', ss]
-  if (ins.startsWith('//') || ins.startsWith(';')) return [ins, ss]
+  if (!line) return ['', ss]
+  if (line.startsWith('//') || line.startsWith(';')) return [line, ss]
 
-  const [opcode, a, b] = parseLine(ins)
+  const [opcode, a, b] = parseLine(line)
 
   const op = opcode as Op
 
   const code = config.ops[op]
-  if (!code) return [`// ${ins}`, ss]
-
-  if (op === 'cmp') return ['NUL', {...ss, cmpA: a, cmpB: b}]
+  if (!code) return [`// ${line}`, ss]
 
   if (config.transform) {
     let transformResult = config.transform(op, a, b, code, ss)
+    console.log(transformResult)
+
     if (transformResult) return transformResult
   }
+
+  if (op === 'cmp') return ['NUL', {...ss, cmpA: a, cmpB: b}]
 
   let output = replaceArg(code, a, b, '', config.regs)
 
@@ -91,11 +93,13 @@ export function simplifyLine(
   return [output, ss]
 }
 
-export function simplify(code: string, config = JSIL) {
+export function simplifyWithState(
+  code: string,
+  config = JSIL,
+  ss = createSimplifyState(),
+): SimplifyResult {
   const lines = toLines(code)
   const simplified = []
-
-  let ss = createSimplifyState()
 
   for (let line of lines) {
     const [result, nextState] = simplifyLine(line, ss, config)
@@ -105,8 +109,11 @@ export function simplify(code: string, config = JSIL) {
     simplified.push(result)
   }
 
-  return simplified.join('\n')
+  return [simplified.join('\n'), ss]
 }
 
-export const createSimplifier = (config = JSIL) => (code: string) =>
-  simplify(code, config)
+export const simplify = (
+  code: string,
+  config = JSIL,
+  ss = createSimplifyState(),
+) => simplifyWithState(code, config, ss)[0]

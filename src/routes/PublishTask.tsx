@@ -99,7 +99,7 @@ export function PublishTaskPage(props: Props) {
   }
 
   useEffect(() => {
-    getBalance().then(setBalance)
+    getBalance().then(balance => balance && setBalance(balance))
   }, [task])
 
   return (

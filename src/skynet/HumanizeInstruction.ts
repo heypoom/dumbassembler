@@ -6,6 +6,10 @@ import {
   RegMap,
   simplify,
   replaceArg,
+  compareJumpOps,
+  SimplifyTransform,
+  simplifyWithState,
+  SimplifyState,
 } from '../interpreter/Simplify'
 
 export const instructionsForHuman: OpMap = {
@@ -46,17 +50,41 @@ export function getQuestionType(question: string): QuestionType {
   return 'NONE'
 }
 
-export function toHuman(code: string, ms = m()) {
-  const config: SimplifyConfig = {
-    ...defaultConfig,
-    transform: (op, $a, $b, code, ss) => {
-      const a = toVal(ms, $a).toString()
-      const b = toVal(ms, $b).toString()
-      const evaluated = replaceArg(code, a, b, '')
+export const createHumanTransform = (ms = m()): SimplifyTransform => (
+  op,
+  $a,
+  $b,
+  code,
+  ss,
+) => {
+  if (op === 'cmp') {
+    console.log(op, $a, $b)
 
-      return [evaluated, ss]
-    },
+    return ['compare 5 with 3', {...ss, cmpA: $a, cmpB: $b}]
   }
 
-  return simplify(code, config)
+  console.log(ss)
+
+  const a = toVal(ms, $a).toString()
+  const b = toVal(ms, $b).toString()
+
+  if (compareJumpOps.includes(op as Op)) {
+    const cA = toVal(ms, ss.cmpA).toString()
+    const cB = toVal(ms, ss.cmpB).toString()
+
+    return [replaceArg(code, cA, cB, a), ss]
+  }
+
+  return [replaceArg(code, a, b, ''), ss]
 }
+
+export function toHumanWithState(code: string, ms = m(), ss?: SimplifyState) {
+  const config: SimplifyConfig = {
+    ...defaultConfig,
+    transform: createHumanTransform(ms),
+  }
+
+  return simplifyWithState(code, config, ss)
+}
+
+export const toHuman = (code: string, ms = m()) => toHumanWithState(code, ms)[0]

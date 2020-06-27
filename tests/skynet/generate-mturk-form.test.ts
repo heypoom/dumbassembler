@@ -74,4 +74,26 @@ describe('generate MTurk XML form', () => {
 
     expect(input).toBe(trim(output))
   })
+
+  it('should be able to do conditional branching', () => {
+    const input = createCrowdFields(`
+      mov eax, 10
+      mov ebx, 50
+      add eax, 5
+      add ecx, 20
+      cmp eax, ebx
+      jl 2
+    `)
+
+    const output = `
+      <p>what is 10 + 5?</p>
+      <crowd-input name="2_add_eax_5" placeholder="what is 10 + 5?" type="number" required></crowd-input>
+      <p>what is 0 + 20?</p>
+      <crowd-input name="3_add_ecx_20" placeholder="what is 0 + 20?" type="number" required></crowd-input>
+
+      <crowd-checkbox name="5_jl_2">is 15 less than 50?</crowd-checkbox>
+    `
+
+    expect(input).toBe(trim(output))
+  })
 })

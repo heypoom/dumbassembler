@@ -1,7 +1,13 @@
-import {QuestionType, toHuman, getQuestionType} from './HumanizeInstruction'
+import {
+  QuestionType,
+  toHuman,
+  getQuestionType,
+  toHumanWithState,
+} from './HumanizeInstruction'
 import {m, Op} from '../interpreter/Machine'
 import {toLines, trim, trim} from '../interpreter/Utils'
 import {interpret} from '../interpreter/Interpret'
+import {createSimplifyState} from '../interpreter/Simplify'
 
 export const MTurkXML = (htmlCode: string) => `
   <HTMLQuestion xmlns="http://mechanicalturk.amazonaws.com/AWSMechanicalTurkDataSchemas/2011-11-11/HTMLQuestion.xsd">
@@ -46,19 +52,18 @@ function toCrowdField(question: string, id: string) {
   return trim(handler(question, id))
 }
 
-export function codeToCrowdField(line: string, no: number, ms = m()) {
-  let id = toFormId(line, no)
-  let question = toHuman(line, ms)
-
-  return toCrowdField(question, id)
-}
-
 export function createCrowdFields(code: string, ms = m()) {
-  function parseLine(line: string, no: number) {
-    let result = codeToCrowdField(line, no, ms)
-    ms = interpret(ms, line)
+  let ss = createSimplifyState()
 
-    return result
+  function parseLine(line: string, no: number) {
+    let id = toFormId(line, no)
+    let [question, newSS] = toHumanWithState(line, ms, ss)
+
+    const crowdField = toCrowdField(question, id)
+    ms = interpret(ms, line)
+    ss = newSS
+
+    return crowdField
   }
 
   const result = toLines(code)
