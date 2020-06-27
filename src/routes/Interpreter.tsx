@@ -96,7 +96,11 @@ const Button = styled.button`
   }
 `
 
-export function InterpreterPage() {
+interface Props {
+  path: string
+}
+
+export function InterpreterPage(props: Props) {
   const [state, dispatch] = useReducer(programReducer, Program())
   const [code, setCode] = useState('')
   const [irCode, setIRCode] = useState('')

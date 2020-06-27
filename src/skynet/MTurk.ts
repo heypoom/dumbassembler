@@ -6,7 +6,7 @@ AWS.config.update({
   region: 'us-east-1',
 
   // @ts-ignore
-  // endpoint: 'https://mturk-requester-sandbox.us-east-1.amazonaws.com',
+  endpoint: 'https://mturk-requester-sandbox.us-east-1.amazonaws.com',
 })
 
 export const mTurk = new AWS.MTurk()
