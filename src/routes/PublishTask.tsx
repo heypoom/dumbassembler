@@ -1,8 +1,9 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import styled from '@emotion/styled'
 
 import {createHumanTaskFromCode} from '../skynet/MTurkTask'
 import {HIT} from 'aws-sdk/clients/mturk'
+import {getBalance} from '../skynet/MTurk'
 
 interface Props {
   path: string
@@ -77,7 +78,7 @@ const Pre = styled.pre`
   width: 100%;
 `
 
-const Code = styled.code<CodeProps>`
+const Code = styled.code`
   font-family: 'JetBrains Mono', 'FiraCode Nerd Font', 'FiraCode', monospace;
   font-size: 20px;
   line-height: 1.5;
@@ -89,6 +90,7 @@ const Code = styled.code<CodeProps>`
 export function PublishTaskPage(props: Props) {
   const [task, setTask] = useState<HIT>()
   const [code, setCode] = useState('')
+  const [balance, setBalance] = useState('0.00')
 
   async function publishTask() {
     const hit = await createHumanTaskFromCode(code)
@@ -96,8 +98,16 @@ export function PublishTaskPage(props: Props) {
     if (hit) setTask(hit)
   }
 
+  useEffect(() => {
+    getBalance().then(setBalance)
+  }, [task])
+
   return (
     <Container>
+      <div style={{marginBottom: '1em'}}>
+        Account Balance: <strong>{balance}$</strong>
+      </div>
+
       {task && (
         <Pre>
           <Code>{JSON.stringify(task, null, 2)}</Code>

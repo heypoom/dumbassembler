@@ -6,7 +6,7 @@ AWS.config.update({
   region: 'us-east-1',
 
   // @ts-ignore
-  endpoint: 'https://mturk-requester-sandbox.us-east-1.amazonaws.com',
+  // endpoint: 'https://mturk-requester-sandbox.us-east-1.amazonaws.com',
 })
 
 export const mTurk = new AWS.MTurk()
@@ -27,7 +27,7 @@ export async function createTask(question: string, maxTime: number = 120) {
     LifetimeInSeconds: 60 * 60,
     Question: question,
     AssignmentDurationInSeconds: maxTime,
-    Reward: '0.4',
+    Reward: '0.1',
     MaxAssignments: 1,
   }
 
@@ -77,4 +77,10 @@ export async function listTaskResults() {
   }
 
   return results
+}
+
+export async function getTask(taskId: string) {
+  const task = await mTurk.getHIT({HITId: taskId}).promise()
+
+  return task.HIT
 }
