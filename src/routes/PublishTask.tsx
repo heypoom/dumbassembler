@@ -100,6 +100,8 @@ const TaskItemContainer = styled.div`
 
   border: 1px solid #eee;
   border-radius: 8px;
+
+  margin: 20px 0;
 `
 
 const TaskItemInner = styled.div`
