@@ -75,14 +75,13 @@ export function simplifyLine(
   const code = config.ops[op]
   if (!code) return [`// ${line}`, ss]
 
+  if (op === 'cmp') return ['NUL', {...ss, cmpA: a, cmpB: b}]
+
   if (config.transform) {
     let transformResult = config.transform(op, a, b, code, ss)
-    console.log(transformResult)
 
     if (transformResult) return transformResult
   }
-
-  if (op === 'cmp') return ['NUL', {...ss, cmpA: a, cmpB: b}]
 
   let output = replaceArg(code, a, b, '', config.regs)
 

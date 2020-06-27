@@ -52,8 +52,6 @@ describe('generate MTurk XML form', () => {
       add edx, ecx
     `)
 
-    console.log(input)
-
     const output = `
       <p>what is 15 * 15?</p>
       <crowd-input name="3_mul_ecx_ecx" placeholder="what is 15 * 15?" type="number" required></crowd-input>

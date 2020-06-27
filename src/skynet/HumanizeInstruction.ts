@@ -57,14 +57,6 @@ export const createHumanTransform = (ms = m()): SimplifyTransform => (
   code,
   ss,
 ) => {
-  if (op === 'cmp') {
-    console.log(op, $a, $b)
-
-    return ['compare 5 with 3', {...ss, cmpA: $a, cmpB: $b}]
-  }
-
-  console.log(ss)
-
   const a = toVal(ms, $a).toString()
   const b = toVal(ms, $b).toString()
 
