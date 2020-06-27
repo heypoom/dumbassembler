@@ -2,7 +2,7 @@ import {HIT} from 'aws-sdk/clients/mturk'
 
 const PERSIST_KEY = 'dumbassembly'
 
-interface Task {
+export interface Task {
   task: HIT
   inputCode: string
 }
@@ -73,3 +73,5 @@ export const saveTaskResult = (taskId: string, answers: TaskAnswer[]) =>
   setValue('results', {...getValue('results'), [taskId]: answers})
 
 export const getStoredTasks = () => getValue('tasks')
+export const getTaskResults = () => getValue('results')
+export const getTaskResult = (taskId: string) => getValue('results')[taskId]
