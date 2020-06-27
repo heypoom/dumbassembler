@@ -4,6 +4,7 @@ import styled from '@emotion/styled'
 import {createHumanTaskFromCode} from '../skynet/MTurkTask'
 import {HIT} from 'aws-sdk/clients/mturk'
 import {getBalance} from '../skynet/MTurk'
+import {getStore, defaultStoreState} from '../skynet/Persist'
 
 interface Props {
   path: string
@@ -91,6 +92,7 @@ export function PublishTaskPage(props: Props) {
   const [task, setTask] = useState<HIT>()
   const [code, setCode] = useState('')
   const [balance, setBalance] = useState('0.00')
+  const [store, setStore] = useState(defaultStoreState)
 
   async function publishTask() {
     const hit = await createHumanTaskFromCode(code)
@@ -100,6 +102,7 @@ export function PublishTaskPage(props: Props) {
 
   useEffect(() => {
     getBalance().then(balance => balance && setBalance(balance))
+    setStore(getStore())
   }, [task])
 
   return (
@@ -116,6 +119,12 @@ export function PublishTaskPage(props: Props) {
 
       <Textarea value={code} onChange={e => setCode(e.target.value)} />
       <Button onClick={publishTask}>Create Human Labor Task</Button>
+
+      {store && (
+        <Pre>
+          <Code>{JSON.stringify(store, null, 2)}</Code>
+        </Pre>
+      )}
     </Container>
   )
 }

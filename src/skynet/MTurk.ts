@@ -1,4 +1,5 @@
 import AWS from 'aws-sdk'
+import {saveTask, updateTaskStatus, saveTaskResult, TaskAnswer} from './Persist'
 
 AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -36,12 +37,7 @@ export async function createTask(question: string, maxTime: number = 120) {
   return data.HIT
 }
 
-interface Answer {
-  instruction: string
-  result: string
-}
-
-export function parseAnswer(answer: string = ''): Answer[] {
+export function parseAnswer(answer: string = ''): TaskAnswer[] {
   const parser = new DOMParser()
   const xml = parser.parseFromString(answer, 'text/xml')
 
@@ -55,12 +51,19 @@ export function parseAnswer(answer: string = ''): Answer[] {
 
 export async function getTaskAnswer(taskId: string) {
   const tasks = await mTurk.listAssignmentsForHIT({HITId: taskId}).promise()
-
-  return tasks.Assignments?.filter(a => a.Answer).map(a => ({
+  const results = tasks.Assignments?.filter(a => a.Answer).map(a => ({
     id: a.AssignmentId,
     answer: parseAnswer(a.Answer),
     status: a.AssignmentStatus,
   }))
+
+  if (!results) return
+
+  for (let result of results) {
+    saveTaskResult(taskId, result.answer)
+  }
+
+  return results
 }
 
 export async function listTaskResults() {
@@ -81,6 +84,9 @@ export async function listTaskResults() {
 
 export async function getTask(taskId: string) {
   const task = await mTurk.getHIT({HITId: taskId}).promise()
+  if (!task.HIT) return
+
+  updateTaskStatus(task.HIT)
 
   return task.HIT
 }

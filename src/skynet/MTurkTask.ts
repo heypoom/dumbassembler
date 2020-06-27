@@ -10,7 +10,7 @@ export async function createHumanTaskFromCode(code: string) {
   const task = await createTask(questionXML, humanTimeLimit)
   if (!task) return
 
-  if (task.HITId) saveTask(task.HITId)
+  if (task) saveTask(task, code)
 
   return task
 }

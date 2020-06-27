@@ -1,11 +1,25 @@
+import {HIT} from 'aws-sdk/clients/mturk'
+
 const PERSIST_KEY = 'dumbassembly'
 
+interface Task {
+  task: HIT
+  inputCode: string
+}
+
+export interface TaskAnswer {
+  instruction: string
+  result: string
+}
+
 export interface Store {
-  tasks: string[]
+  tasks: Record<string, Task>
+  results: Record<string, TaskAnswer[]>
 }
 
 export const defaultStoreState: Store = {
-  tasks: [],
+  tasks: {},
+  results: {},
 }
 
 export const initStoreValue = () =>
@@ -34,7 +48,28 @@ export function setValue<T extends keyof Store>(key: T, value: Store[T]) {
   localStorage.setItem(PERSIST_KEY, newStateJSON)
 }
 
-export const saveTask = (taskId: string) =>
-  setValue('tasks', [...getValue('tasks'), taskId])
+export function saveTask(hit: HIT, inputCode: string) {
+  if (!hit.HITId) return
+
+  const task: Task = {
+    task: hit,
+    inputCode,
+  }
+
+  setValue('tasks', {...getValue('tasks'), [hit.HITId]: task})
+}
+
+export const getTask = (taskId: string) => getValue('tasks')[taskId]
+
+export function updateTaskStatus(hit: HIT) {
+  const id = hit.HITId
+  if (!id) return
+
+  const task: Task = {...getTask(id), task: hit}
+  setValue('tasks', {...getValue('tasks'), [id]: task})
+}
+
+export const saveTaskResult = (taskId: string, answers: TaskAnswer[]) =>
+  setValue('results', {...getValue('results'), [taskId]: answers})
 
 export const getStoredTasks = () => getValue('tasks')
