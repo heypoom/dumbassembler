@@ -12,7 +12,7 @@
     "aws-sdk": "^2.705.0",
     "color": "^3.1.2",
     "lodash.escaperegexp": "^4.1.2",
-    "luxon": "^1.13.2",
+    "luxon": "^1.28.1",
     "ramda": "^0.27.0",
     "react": "^16.8.0 || 16.9.0-alpha.0",
     "react-dom": "^16.8.6",
